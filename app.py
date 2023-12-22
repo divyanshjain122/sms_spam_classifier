@@ -1,13 +1,26 @@
 import nltk
 nltk.download('punkt')
 nltk.download('stopwords')
+
+import json
 import streamlit as st
 import pickle
 import string
+import requests
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
-
+from streamlit_lottie import st_lottie
 ps=PorterStemmer()
+
+
+def load_lottieurl(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+lottie_sequrity = load_lottieurl("https://lottie.host/89a5ca58-b9b1-4741-8bce-af10035bccf3/wgJtW757GH.json")
+# lottie_messege=load_lottieurl("https://lottie.host/df085eaf-f9cc-4ba8-8255-4f07c866f1dc/xOo0YN4q5v.json")
 
 def transform_text(text):
     text = text.lower()
@@ -39,6 +52,26 @@ tfidf=pickle.load(open('vectorizer.pkl','rb'))
 model=pickle.load(open('model.pkl','rb'))
 
 st.title("SMS Spam Classifier")
+# st_lottie(
+#         lottie_messege,
+#         speed=1,
+#         reverse=False,
+#         loop=True,
+#         quality="low", # medium ; high
+#         # renderer="svg", # canvas
+#         height=100,
+#         width=100,
+#         key=None,
+#     )
+
+
+
+
+
+
+
+
+
 
 input_sms=st.text_area("enter the message")
 if st.button('predict'):
@@ -60,3 +93,28 @@ if st.button('predict'):
         st.header("Spam")
     else:
         st.header("Not Spam")
+
+
+
+with st.container():
+    st.markdown("""
+    <style>
+        .st-l {
+            display: inline-block; /* Display icons side by side */
+            margin-right: 10px; /* Adjust spacing as needed */
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+    st_lottie(
+        lottie_sequrity,
+        speed=1,
+        reverse=False,
+        loop=True,
+        quality="low", # medium ; high
+        # renderer="svg", # canvas
+        height=100,
+        width=100,
+        key=None,
+    )
+    
